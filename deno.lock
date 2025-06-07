@@ -1,0 +1,77 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@ayonli/jsext@*": "1.7.3",
+    "jsr:@ayonli/jsext@^1.7.3": "1.7.3",
+    "jsr:@std/bytes@^1.0.5": "1.0.6",
+    "jsr:@std/csv@^1.0.6": "1.0.6",
+    "jsr:@std/streams@^1.0.9": "1.0.9",
+    "jsr:@std/text@^1.0.14": "1.0.14",
+    "npm:iconv-lite@~0.6.3": "0.6.3",
+    "npm:sudo-prompt@^9.2.1": "9.2.1",
+    "npm:ws@^8.18.0": "8.18.2",
+    "npm:zod@^3.23.8": "3.24.4"
+  },
+  "jsr": {
+    "@ayonli/jsext@1.7.3": {
+      "integrity": "f4ac6c4fe270db43ca05c3b87e6c537bf20ec026c521340c31cfe5d384790202",
+      "dependencies": [
+        "npm:iconv-lite",
+        "npm:sudo-prompt",
+        "npm:ws",
+        "npm:zod"
+      ]
+    },
+    "@std/bytes@1.0.6": {
+      "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
+    },
+    "@std/csv@1.0.6": {
+      "integrity": "52ef0e62799a0028d278fa04762f17f9bd263fad9a8e7f98c14fbd371d62d9fd",
+      "dependencies": [
+        "jsr:@std/streams"
+      ]
+    },
+    "@std/streams@1.0.9": {
+      "integrity": "a9d26b1988cdd7aa7b1f4b51e1c36c1557f3f252880fa6cc5b9f37078b1a5035",
+      "dependencies": [
+        "jsr:@std/bytes"
+      ]
+    },
+    "@std/text@1.0.14": {
+      "integrity": "1a810108482414d19112b8b506ad0b7cba826000cd13f74274ffda6dd83d273f"
+    }
+  },
+  "npm": {
+    "iconv-lite@0.6.3": {
+      "integrity": "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==",
+      "dependencies": [
+        "safer-buffer"
+      ]
+    },
+    "safer-buffer@2.1.2": {
+      "integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="
+    },
+    "sudo-prompt@9.2.1": {
+      "integrity": "sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==",
+      "deprecated": true
+    },
+    "ws@8.18.2": {
+      "integrity": "sha512-DMricUmwGZUVr++AEAe2uiVM7UoO9MAVZMDu05UQOaUII0lp+zOzLLU4Xqh/JvTqklB1T4uELaaPBKyjE1r4fQ=="
+    },
+    "zod@3.24.4": {
+      "integrity": "sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@ayonli/jsext@^1.7.3",
+      "jsr:@std/csv@^1.0.6",
+      "jsr:@std/text@^1.0.14"
+    ],
+    "packageJson": {
+      "dependencies": [
+        "npm:@types/node@^22.15.30"
+      ]
+    }
+  }
+}

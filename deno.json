@@ -1,0 +1,21 @@
+{
+    "nodeModulesDir": "manual",
+    "imports": {
+        "@ayonli/jsext": "jsr:@ayonli/jsext@^1.7.3",
+        "@std/csv": "jsr:@std/csv@^1.0.6",
+        "@std/text": "jsr:@std/text@^1.0.14"
+    },
+    "fmt": {
+        "indentWidth": 4,
+        "exclude": [
+            "./index.js",
+            "./index.d.ts"
+        ]
+    },
+    "lint": {
+        "exclude": [
+            "./index.js",
+            "./index.d.ts"
+        ]
+    }
+}
