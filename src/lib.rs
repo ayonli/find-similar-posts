@@ -95,8 +95,16 @@ fn find_similar_posts_native_parallel(
     candidates: Vec<PostData>,
     top_n: u32,
 ) -> Result<FindTopNResult> {
+    do_find_similar_posts_native_parallel(&source, &candidates, top_n)
+}
+
+fn do_find_similar_posts_native_parallel(
+    source: &PostData,
+    candidates: &Vec<PostData>,
+    top_n: u32,
+) -> Result<FindTopNResult> {
     let start = Instant::now();
-    let (title_weight, content_weight) = get_weights(&source)?;
+    let (title_weight, content_weight) = get_weights(source)?;
 
     let matches: Vec<Match> = candidates
         .par_iter()
@@ -151,7 +159,7 @@ impl Task for AsyncFindSimilarPosts {
     type JsValue = FindTopNResult;
 
     fn compute(&mut self) -> Result<Self::Output> {
-        find_similar_posts_native_parallel(self.source.clone(), self.candidates.clone(), self.top_n)
+        do_find_similar_posts_native_parallel(&self.source, &self.candidates, self.top_n)
     }
 
     fn resolve(&mut self, _env: Env, output: Self::Output) -> Result<Self::JsValue> {
