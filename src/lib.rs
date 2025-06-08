@@ -106,7 +106,7 @@ fn do_find_similar_posts_native_parallel(
     let start = Instant::now();
     let (title_weight, content_weight) = get_weights(source)?;
 
-    let matches: Vec<Match> = candidates
+    let mut matches: Vec<Match> = candidates
         .par_iter()
         .filter_map(|candidate| {
             let title_score =
@@ -126,7 +126,6 @@ fn do_find_similar_posts_native_parallel(
             }
         })
         .collect();
-    let mut matches = matches;
 
     matches.sort_by(|a, b| {
         let order = b.score.partial_cmp(&a.score);
