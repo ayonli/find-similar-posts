@@ -1,7 +1,7 @@
-import { strictEqual } from "node:assert";
+import { strictEqual } from "node:assert"
 // @ts-types="../index.d.ts"
-import { PostData } from "../index.js";
-import { findSimilarPosts } from "./mod.ts";
+import { PostData } from "../index.js"
+import { findSimilarPosts } from "./mod.ts"
 
 Deno.test("findClosetPostsTopN", () => {
     const source: PostData = {
@@ -13,7 +13,7 @@ OS: Windows 11
 Sending a SIGINT OS signal on windows like: Deno.kill(Deno.pid, 'SIGINT');
 Results in: TypeError: Windows only supports ctrl-c (SIGINT) and ctrl-break (SIGBREAK), but got SIGINT
         `,
-    };
+    }
 
     const candidates: PostData[] = [
         {
@@ -38,9 +38,9 @@ libraries on Termux. We seek a streamlined download process for Deno.js similar 
 and Python, rather than having to download additional libraries on Termux.
             `,
         },
-    ];
+    ]
 
-    const { matches } = findSimilarPosts(source, candidates, 1);
-    strictEqual(matches.length, 1);
-    strictEqual(matches[0].target.title, "Deno.kill on windows");
-});
+    const { matches } = findSimilarPosts(source, candidates, 1)
+    strictEqual(matches.length, 1)
+    strictEqual(matches[0].target.title, "Deno.kill on windows")
+})
