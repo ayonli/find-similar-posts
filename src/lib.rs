@@ -54,7 +54,7 @@ pub fn find_similar_posts_native(
     let (title_weight, content_weight) = get_weights(&source)?;
     let mut matches = vec![];
 
-    for candidate in candidates.iter() {
+    for candidate in candidates.into_iter() {
         let title_score =
             normalized_similarity(source.title.chars(), candidate.title.chars()) * title_weight;
         let content_score =
@@ -65,7 +65,7 @@ pub fn find_similar_posts_native(
         // 0.5 is the threshold to consider a match
         if score > 0.5 {
             matches.push(Match {
-                target: candidate.clone(),
+                target: candidate,
                 score,
             });
         }
@@ -108,7 +108,7 @@ fn do_find_similar_posts_native_parallel(
 
     let matches: Vec<Match> = candidates
         .par_iter()
-        .map(|candidate| {
+        .filter_map(|candidate| {
             let title_score =
                 normalized_similarity(source.title.chars(), candidate.title.chars()) * title_weight;
             let content_score =
@@ -125,8 +125,6 @@ fn do_find_similar_posts_native_parallel(
                 None
             }
         })
-        .filter(|e| e.is_some())
-        .map(|e| e.unwrap())
         .collect();
     let mut matches = matches;
 
