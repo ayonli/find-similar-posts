@@ -14,14 +14,14 @@
         "lineWidth": 100,
         "semiColons": false,
         "exclude": [
-            "./index.js",
-            "./index.d.ts"
+            "**/*/index.js",
+            "**/*/index.d.ts"
         ]
     },
     "lint": {
         "exclude": [
-            "./index.js",
-            "./index.d.ts"
+            "index.js",
+            "index.d.ts"
         ]
     }
 }

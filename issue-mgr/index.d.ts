@@ -20,9 +20,8 @@ export interface SimilarIssueFeaturesRecord {
   score: number
 }
 export declare class IssueFeatureStore {
-  constructor()
-  preload(records: Array<IssueFeaturesRecord>): void
-  addRecord(record: IssueFeaturesRecord): void
+  constructor(records?: Array<IssueFeaturesRecord> | undefined | null)
+  setRecord(record: IssueFeaturesRecord): void
   getRecord(issueId: string): IssueFeaturesRecord | null
   removeRecord(issueId: string): boolean
   findSimilarRecords(features: IssueFeatures, topN?: number | undefined | null, signal?: AbortSignal | undefined | null): Promise<Array<SimilarIssueFeaturesRecord>>

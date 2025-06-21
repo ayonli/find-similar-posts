@@ -47,40 +47,31 @@ pub struct IssueFeatureStore {
 #[napi]
 impl IssueFeatureStore {
     #[napi(constructor)]
-    pub fn new() -> Self {
+    pub fn new(records: Option<Vec<IssueFeaturesRecord>>) -> Self {
+        let map: HashMap<String, IssueFeatures> = records.map_or_else(
+            || HashMap::new(),
+            |records| {
+                records
+                    .into_iter()
+                    .filter(|item| {
+                        !item.issue_id.is_empty()
+                            && (item.features.operation.is_some()
+                                || item.features.phenomenon.is_some()
+                                || item.features.expected_behavior.is_some()
+                                || item.features.actual_behavior.is_some())
+                    })
+                    .map(|map| (map.issue_id, map.features))
+                    .collect()
+            },
+        );
+
         IssueFeatureStore {
-            issue_features_map: Arc::new(RwLock::new(HashMap::new())),
+            issue_features_map: Arc::new(RwLock::new(map)),
         }
     }
 
     #[napi]
-    pub fn preload(&self, records: Vec<IssueFeaturesRecord>) -> Result<()> {
-        let _map: HashMap<String, IssueFeatures> = records
-            .into_iter()
-            .filter(|item| {
-                !item.issue_id.is_empty()
-                    && (item.features.operation.is_some()
-                        || item.features.phenomenon.is_some()
-                        || item.features.expected_behavior.is_some()
-                        || item.features.actual_behavior.is_some())
-            })
-            .map(|map| (map.issue_id, map.features))
-            .collect();
-
-        match self.issue_features_map.write() {
-            Ok(mut map) => {
-                *map = _map;
-                Ok(())
-            }
-            Err(e) => Err(Error::from_reason(format!(
-                "Failed to preload issue features: {}",
-                e
-            ))),
-        }
-    }
-
-    #[napi]
-    pub fn add_record(&self, record: IssueFeaturesRecord) -> Result<()> {
+    pub fn set_record(&self, record: IssueFeaturesRecord) -> Result<()> {
         if record.issue_id.is_empty() {
             return Err(Error::from_reason("issue_id must not be empty"));
         } else if record.features.operation.is_none()
@@ -265,9 +256,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_issue_feature_store_preload() {
-        let store = IssueFeatureStore::new();
-
+    fn test_issue_feature_store_new() {
         let record1 = IssueFeaturesRecord {
             issue_id: "1".to_string(),
             features: IssueFeatures {
@@ -303,7 +292,7 @@ mod tests {
             },
         ];
 
-        store.preload(records).unwrap();
+        let store = IssueFeatureStore::new(Some(records));
 
         assert_eq!(store.get_record("1".to_string()).unwrap(), Some(record1));
         assert_eq!(store.get_record("2".to_string()).unwrap(), Some(record2));
@@ -312,8 +301,8 @@ mod tests {
     }
 
     #[test]
-    fn test_issue_feature_store_add_record() {
-        let store = IssueFeatureStore::new();
+    fn test_issue_feature_store_set_record() {
+        let store = IssueFeatureStore::new(None);
 
         let record = IssueFeaturesRecord {
             issue_id: "1".to_string(),
@@ -325,15 +314,13 @@ mod tests {
             },
         };
 
-        store.add_record(record.clone()).unwrap();
+        store.set_record(record.clone()).unwrap();
         assert_eq!(store.get_record("1".to_string()).unwrap(), Some(record));
         assert_eq!(store.get_record("2".to_string()).unwrap(), None);
     }
 
     #[test]
     fn test_issue_feature_store_remove_record() {
-        let store = IssueFeatureStore::new();
-
         let record1 = IssueFeaturesRecord {
             issue_id: "1".to_string(),
             features: IssueFeatures {
@@ -355,8 +342,8 @@ mod tests {
             },
         };
 
-        store.add_record(record1.clone()).unwrap();
-        store.add_record(record2.clone()).unwrap();
+        let records = vec![record1.clone(), record2.clone()];
+        let store = IssueFeatureStore::new(Some(records));
 
         assert_eq!(store.get_record("1".to_string()).unwrap(), Some(record1));
         assert_eq!(store.get_record("2".to_string()).unwrap(), Some(record2));
@@ -368,8 +355,6 @@ mod tests {
 
     #[test]
     fn test_find_similar_records_in_parallel() {
-        let store = IssueFeatureStore::new();
-
         let record1 = IssueFeaturesRecord {
             issue_id: "1".to_string(),
             features: IssueFeatures {
@@ -391,8 +376,8 @@ mod tests {
             },
         };
 
-        store.add_record(record1.clone()).unwrap();
-        store.add_record(record2.clone()).unwrap();
+        let records = vec![record1.clone(), record2.clone()];
+        let store = IssueFeatureStore::new(Some(records));
 
         let features = IssueFeatures {
             operation: Some("Turn on the switch".to_string()),

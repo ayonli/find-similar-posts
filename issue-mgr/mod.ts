@@ -10,14 +10,14 @@ import {
 export type { IssueFeatures, IssueFeaturesRecord, SimilarIssueFeaturesRecord }
 
 export class IssueFeatureStore {
-    #impl = new IssueFeatureStoreNative()
+    #impl: IssueFeatureStoreNative
 
-    preload(records: IssueFeaturesRecord[]): void {
-        this.#impl.preload(records)
+    constructor(records?: IssueFeaturesRecord[] | null | undefined) {
+        this.#impl = new IssueFeatureStoreNative(records)
     }
 
-    addRecord(record: IssueFeaturesRecord): void {
-        this.#impl.addRecord(record)
+    setRecord(record: IssueFeaturesRecord): void {
+        this.#impl.setRecord(record)
     }
 
     getRecord(issueId: string): IssueFeaturesRecord | null {

@@ -1,9 +1,7 @@
 import { deepStrictEqual, ok } from "node:assert"
 import { type IssueFeaturesRecord, IssueFeatureStore } from "./mod.ts"
 
-Deno.test("IssueFeatureStore#preload", () => {
-    const store = new IssueFeatureStore()
-
+Deno.test("IssueFeatureStore#constructor", () => {
     const record1: IssueFeaturesRecord = {
         issueId: "1",
         features: {
@@ -28,7 +26,7 @@ Deno.test("IssueFeatureStore#preload", () => {
         },
     ]
 
-    store.preload(records)
+    const store = new IssueFeatureStore(records)
 
     deepStrictEqual(store.getRecord("1"), record1)
     deepStrictEqual(store.getRecord("2"), record2)
@@ -36,7 +34,7 @@ Deno.test("IssueFeatureStore#preload", () => {
     deepStrictEqual(store.getRecord("4"), null)
 })
 
-Deno.test("IssueFeatureStore#addRecord", () => {
+Deno.test("IssueFeatureStore#setRecord", () => {
     const store = new IssueFeatureStore()
 
     const record: IssueFeaturesRecord = {
@@ -48,7 +46,7 @@ Deno.test("IssueFeatureStore#addRecord", () => {
         },
     }
 
-    store.addRecord(record)
+    store.setRecord(record)
     deepStrictEqual(store.getRecord("1"), record)
     deepStrictEqual(store.getRecord("2"), null)
 })
@@ -65,7 +63,7 @@ Deno.test("IssueFeatureStore#removeRecord", () => {
         },
     }
 
-    store.addRecord(record)
+    store.setRecord(record)
     deepStrictEqual(store.getRecord("1"), record)
 
     const removed = store.removeRecord("1")
@@ -78,8 +76,6 @@ Deno.test("IssueFeatureStore#removeRecord", () => {
 })
 
 Deno.test("IssueFeatureStore#findSimilarRecords", async () => {
-    const store = new IssueFeatureStore()
-
     const record1: IssueFeaturesRecord = {
         issueId: "1",
         features: {
@@ -96,7 +92,7 @@ Deno.test("IssueFeatureStore#findSimilarRecords", async () => {
         },
     }
 
-    store.preload([record1, record2])
+    const store = new IssueFeatureStore([record1, record2])
 
     const signal = AbortSignal.timeout(5_000)
     const similarRecords = await store.findSimilarRecords({

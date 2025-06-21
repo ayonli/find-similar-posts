@@ -1,5 +1,8 @@
 {
     "deno.enable": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "denoland.vscode-deno"
+    },
     "rust-analyzer.procMacro.ignored": {
         "napi-derive": [
             "napi"
