@@ -1,0 +1,29 @@
+{
+    "private": true,
+    "name": "@napi-examples/issue-mgr",
+    "version": "0.0.0",
+    "type": "commonjs",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "napi": {
+        "name": "issue-mgr",
+        "triples": {
+            "additional": [
+                "aarch64-apple-darwin"
+            ]
+        }
+    },
+    "license": "MIT",
+    "engines": {
+        "node": ">= 10"
+    },
+    "scripts": {
+        "artifacts": "napi artifacts",
+        "build": "napi build --no-const-enum --platform --release",
+        "build:debug": "napi build  --no-const-enum --platform",
+        "prepublishOnly": "napi prepublish -t npm",
+        "test": "ava",
+        "universal": "napi universal",
+        "version": "napi version"
+    }
+}
