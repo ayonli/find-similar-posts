@@ -310,8 +310,9 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { findSimilarPostsNative, findSimilarPostsNativeParallel, findSimilarPostsNativeAsync } = nativeBinding
+const { PostStore, findSimilarPostsNative, findSimilarPostsNativeParallel, findSimilarPostsNativeAsync } = nativeBinding
 
+module.exports.PostStore = PostStore
 module.exports.findSimilarPostsNative = findSimilarPostsNative
 module.exports.findSimilarPostsNativeParallel = findSimilarPostsNativeParallel
 module.exports.findSimilarPostsNativeAsync = findSimilarPostsNativeAsync

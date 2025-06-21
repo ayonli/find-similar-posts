@@ -8,6 +8,8 @@ use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 #[macro_use]
 extern crate napi_derive;
 
+pub mod store;
+
 #[napi(object)]
 #[derive(Debug, Clone)]
 pub struct PostData {
@@ -151,6 +153,7 @@ pub struct AsyncFindSimilarPosts {
     top_n: u32,
 }
 
+#[napi]
 impl Task for AsyncFindSimilarPosts {
     type Output = FindTopNResult;
     type JsValue = FindTopNResult;
@@ -164,7 +167,7 @@ impl Task for AsyncFindSimilarPosts {
     }
 }
 
-#[napi(ts_return_type = "Promise<FindTopNResult>")]
+#[napi]
 pub fn find_similar_posts_native_async(
     source: PostData,
     candidates: Vec<PostData>,

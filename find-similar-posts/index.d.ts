@@ -18,3 +18,8 @@ export interface FindTopNResult {
 export declare function findSimilarPostsNative(source: PostData, candidates: Array<PostData>, topN: number): FindTopNResult
 export declare function findSimilarPostsNativeParallel(source: PostData, candidates: Array<PostData>, topN: number): FindTopNResult
 export declare function findSimilarPostsNativeAsync(source: PostData, candidates: Array<PostData>, topN: number): Promise<FindTopNResult>
+export declare class PostStore {
+  constructor()
+  preload(posts: Array<PostData>): void
+  findSimilarPosts(source: PostData, topN: number): Promise<FindTopNResult>
+}

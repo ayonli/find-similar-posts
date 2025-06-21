@@ -7,6 +7,7 @@ import {
     findSimilarPostsNativeParallel,
     Match,
     PostData,
+    PostStore,
 } from "./index.js"
 import { findSimilarPosts } from "./ts/mod.ts"
 import { findSimilarPostsParallel } from "./ts/parallel.ts"
@@ -133,6 +134,23 @@ let match: Match | undefined
     const callTime = Date.now() - start
     results.push({
         fn_name: "findSimilarPostsNativeAsync",
+        call_time_ms: callTime,
+        process_time_ms: processTime,
+        data_passing_ms: callTime - processTime,
+    })
+    strictEqual(matches.length, 1)
+    deepStrictEqual(matches[0], match)
+}
+
+{
+    const store = new PostStore()
+    store.preload(posts)
+
+    const start = Date.now()
+    const { matches, processTime } = await store.findSimilarPosts(newPost, 3)
+    const callTime = Date.now() - start
+    results.push({
+        fn_name: "PostStore#findSimilarPosts",
         call_time_ms: callTime,
         process_time_ms: processTime,
         data_passing_ms: callTime - processTime,
