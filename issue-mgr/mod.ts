@@ -13,11 +13,22 @@ export type { DbOptions, IssueFeatures, IssueFeaturesRecord, SimilarIssueFeature
 export class IssueFeatureStore {
     #impl: IssueFeatureStoreNative
 
-    static async fromDb(options: DbOptions): Promise<IssueFeatureStore> {
+    static async fromDB(options: DbOptions): Promise<IssueFeatureStore> {
         const impl = await IssueFeatureStoreNative.fromDb(options)
         const ins = new this()
         ins.#impl = impl
         return ins
+    }
+
+    static async fromCSV(path: string): Promise<IssueFeatureStore> {
+        const impl = await IssueFeatureStoreNative.fromCsv(path)
+        const ins = new this()
+        ins.#impl = impl
+        return ins
+    }
+
+    async toCSV(path: string): Promise<void> {
+        return await this.#impl.toCsv(path)
     }
 
     constructor(records?: IssueFeaturesRecord[] | null | undefined) {

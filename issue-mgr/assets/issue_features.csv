@@ -1,0 +1,3 @@
+"issue_id","operation","phenomenon","expected_behavior","actual_behavior"
+"1",Turn on the switch,,The device is turned on,The device is not turned on
+"2",Turn off the switch,The device remains turned on instead if being turned on,,

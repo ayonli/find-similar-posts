@@ -24,6 +24,8 @@ export interface SimilarIssueFeaturesRecord {
   score: number
 }
 export declare class IssueFeatureStore {
+  static fromCsv(path: string): Promise<IssueFeatureStore>
+  toCsv(path: string): Promise<void>
   static fromDb(options: DbOptions): Promise<IssueFeatureStore>
   constructor(records?: Array<IssueFeaturesRecord> | undefined | null)
   setRecord(record: IssueFeaturesRecord): void

@@ -1,4 +1,5 @@
 import { deepStrictEqual, ok } from "node:assert"
+import func from "@ayonli/jsext/func"
 import { type IssueFeaturesRecord, IssueFeatureStore } from "./mod.ts"
 
 Deno.test("IssueFeatureStore#constructor", () => {
@@ -107,8 +108,8 @@ Deno.test("IssueFeatureStore#findSimilarRecords", async () => {
     ok(similarRecords[0].score > 0.8)
 })
 
-Deno.test("IssueFeatureStore.loadFromDb_mysql", async () => {
-    const store = await IssueFeatureStore.fromDb({
+Deno.test("IssueFeatureStore.fromDB_mysql", async () => {
+    const store = await IssueFeatureStore.fromDB({
         url: Deno.env.get("MYSQL_URL") ?? "",
         table: "issue_features",
     })
@@ -137,8 +138,8 @@ Deno.test("IssueFeatureStore.loadFromDb_mysql", async () => {
     deepStrictEqual(store.getRecord("3"), null)
 })
 
-Deno.test("IssueFeatureStore.loadFromDb_postgres", async () => {
-    const store = await IssueFeatureStore.fromDb({
+Deno.test("IssueFeatureStore.fromDB_postgres", async () => {
+    const store = await IssueFeatureStore.fromDB({
         url: Deno.env.get("PG_URL") ?? "",
         table: "issue_features",
     })
@@ -167,8 +168,8 @@ Deno.test("IssueFeatureStore.loadFromDb_postgres", async () => {
     deepStrictEqual(store.getRecord("3"), null)
 })
 
-Deno.test("IssueFeatureStore.loadFromDb_sqlite", async () => {
-    const store = await IssueFeatureStore.fromDb({
+Deno.test("IssueFeatureStore.fromDB_sqlite", async () => {
+    const store = await IssueFeatureStore.fromDB({
         url: "sqlite:./assets/issue_mgr.db",
         table: "issue_features",
     })
@@ -196,3 +197,46 @@ Deno.test("IssueFeatureStore.loadFromDb_sqlite", async () => {
     )
     deepStrictEqual(store.getRecord("3"), null)
 })
+
+Deno.test("IssueFeatureStore.fromCSV", async () => {
+    const store = await IssueFeatureStore.fromCSV("./assets/issue_features.csv")
+
+    deepStrictEqual(
+        store.getRecord("1"),
+        {
+            issueId: "1",
+            features: {
+                operation: "Turn on the switch",
+                expectedBehavior: "The device is turned on",
+                actualBehavior: "The device is not turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(
+        store.getRecord("2"),
+        {
+            issueId: "2",
+            features: {
+                operation: "Turn off the switch",
+                phenomenon: "The device remains turned on instead if being turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(store.getRecord("3"), null)
+})
+
+Deno.test(
+    "IssueFeatureStore.toCSV",
+    func(async (defer) => {
+        const input = "./assets/issue_features.csv"
+        const output = "./assets/issue_features_copy.csv"
+        const store1 = await IssueFeatureStore.fromCSV(input)
+        await store1.toCSV(output)
+        defer(() => Deno.remove(output))
+
+        const store2 = await IssueFeatureStore.fromCSV(output)
+        deepStrictEqual(store2.getRecord("1"), store1.getRecord("1"))
+        deepStrictEqual(store2.getRecord("2"), store1.getRecord("2"))
+        deepStrictEqual(store2.getRecord("3"), null)
+    }),
+)
