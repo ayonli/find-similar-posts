@@ -1,26 +1,14 @@
-use std::{
-    collections::HashMap,
-    sync::{Arc, RwLock},
-};
-
 use napi::Error;
-use sqlx::{Connection, MySqlConnection, PgConnection, SqliteConnection, prelude::FromRow};
+use sqlx::{Connection, MySqlConnection, PgConnection, SqliteConnection};
 
-use crate::feature::{IssueFeatureStore, IssueFeatures};
+use crate::feature::{
+    IssueFeatureStore, IssueFeatures, IssueFeaturesRecord, ext::RawIssueFeaturesRecord,
+};
 
 #[napi(object)]
 pub struct DbOptions {
     pub url: String,
     pub table: String,
-}
-
-#[derive(Debug, FromRow)]
-struct RawIssueFeaturesRecord {
-    pub issue_id: String,
-    pub operation: Option<String>,
-    pub phenomenon: Option<String>,
-    pub expected_behavior: Option<String>,
-    pub actual_behavior: Option<String>,
 }
 
 #[napi]
@@ -65,7 +53,7 @@ impl IssueFeatureStore {
                 )));
             }
         };
-        let map: HashMap<String, IssueFeatures> = rows
+        let records = rows
             .into_iter()
             .map(
                 |RawIssueFeaturesRecord {
@@ -75,22 +63,20 @@ impl IssueFeatureStore {
                      expected_behavior,
                      actual_behavior,
                  }| {
-                    (
-                        issue_id.clone(),
-                        IssueFeatures {
+                    IssueFeaturesRecord {
+                        issue_id: issue_id.clone(),
+                        features: IssueFeatures {
                             phenomenon,
                             operation,
                             expected_behavior,
                             actual_behavior,
                         },
-                    )
+                    }
                 },
             )
             .collect();
 
-        Ok(IssueFeatureStore {
-            issue_features_map: Arc::new(RwLock::new(map)),
-        })
+        Ok(IssueFeatureStore::new(Some(records)))
     }
 }
 
