@@ -67,11 +67,6 @@
       "jsr:@ayonli/jsext@^1.7.3",
       "jsr:@std/csv@^1.0.6",
       "jsr:@std/text@^1.0.14"
-    ],
-    "packageJson": {
-      "dependencies": [
-        "npm:@types/node@^22.15.30"
-      ]
-    }
+    ]
   }
 }

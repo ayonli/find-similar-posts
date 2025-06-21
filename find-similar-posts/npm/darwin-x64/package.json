@@ -1,5 +1,5 @@
 {
-    "name": "@ayonli/find-similar-posts-darwin-x64",
+    "name": "@napi-examples/find-similar-posts-darwin-x64",
     "version": "0.0.0",
     "os": [
         "darwin"

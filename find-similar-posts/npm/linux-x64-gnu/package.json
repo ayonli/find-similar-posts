@@ -1,5 +1,5 @@
 {
-    "name": "@ayonli/find-similar-posts-linux-x64-gnu",
+    "name": "@napi-examples/find-similar-posts-linux-x64-gnu",
     "version": "0.0.0",
     "os": [
         "linux"

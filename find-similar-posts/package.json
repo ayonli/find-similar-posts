@@ -1,6 +1,6 @@
 {
     "private": true,
-    "name": "@ayonli/find-similar-posts",
+    "name": "@napi-examples/find-similar-posts",
     "version": "0.0.0",
     "type": "commonjs",
     "main": "index.js",
@@ -20,14 +20,11 @@
     },
     "scripts": {
         "artifacts": "napi artifacts",
-        "build": "napi build --platform --release",
-        "build:debug": "napi build --platform",
+        "build": "napi build --no-const-enum --platform --release",
+        "build:debug": "napi build --no-const-enum --platform",
         "prepublishOnly": "napi prepublish -t npm",
         "test": "cargo test && deno test -A",
         "universal": "napi universal",
         "version": "napi version"
-    },
-    "devDependencies": {
-        "@types/node": "^22.15.30"
     }
 }
