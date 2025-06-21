@@ -3,7 +3,10 @@ use std::{
     sync::{Arc, RwLock},
 };
 
-use napi::{bindgen_prelude::AsyncTask, Env, Error, Result, Task};
+use napi::{
+    bindgen_prelude::{AbortSignal, AsyncTask},
+    Env, Error, Result, Task,
+};
 use rapidfuzz::distance::levenshtein::normalized_similarity;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
@@ -142,12 +145,16 @@ impl IssueFeatureStore {
         &self,
         features: IssueFeatures,
         top_n: Option<u32>,
+        signal: Option<AbortSignal>,
     ) -> AsyncTask<AsyncFindSimilarRecords> {
-        AsyncTask::new(AsyncFindSimilarRecords {
-            features,
-            issue_feature_map: self.issue_features_map.clone(),
-            top_n: top_n.unwrap_or(5),
-        })
+        AsyncTask::with_optional_signal(
+            AsyncFindSimilarRecords {
+                features,
+                issue_feature_map: self.issue_features_map.clone(),
+                top_n: top_n.unwrap_or(5),
+            },
+            signal,
+        )
     }
 }
 

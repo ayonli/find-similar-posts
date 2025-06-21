@@ -25,5 +25,5 @@ export declare class IssueFeatureStore {
   addRecord(record: IssueFeaturesRecord): void
   getRecord(issueId: string): IssueFeaturesRecord | null
   removeRecord(issueId: string): boolean
-  findSimilarRecords(features: IssueFeatures, topN?: number | undefined | null): Promise<Array<SimilarIssueFeaturesRecord>>
+  findSimilarRecords(features: IssueFeatures, topN?: number | undefined | null, signal?: AbortSignal | undefined | null): Promise<Array<SimilarIssueFeaturesRecord>>
 }

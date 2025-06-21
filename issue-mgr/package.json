@@ -3,8 +3,7 @@
     "name": "@napi-examples/issue-mgr",
     "version": "0.0.0",
     "type": "commonjs",
-    "main": "index.js",
-    "types": "index.d.ts",
+    "exports": "./mod.ts",
     "napi": {
         "name": "issue-mgr",
         "triples": {
@@ -22,7 +21,7 @@
         "build": "napi build --no-const-enum --platform --release",
         "build:debug": "napi build  --no-const-enum --platform",
         "prepublishOnly": "napi prepublish -t npm",
-        "test": "ava",
+        "test": "deno test -A .",
         "universal": "napi universal",
         "version": "napi version"
     }

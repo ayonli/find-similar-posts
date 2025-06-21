@@ -11,6 +11,7 @@
     ],
     "fmt": {
         "indentWidth": 4,
+        "lineWidth": 100,
         "semiColons": false,
         "exclude": [
             "./index.js",
