@@ -21,7 +21,7 @@
         "build": "napi build --no-const-enum --platform --release",
         "build:debug": "napi build  --no-const-enum --platform",
         "prepublishOnly": "napi prepublish -t npm",
-        "test": "deno test -A .",
+        "test": "cargo test && deno test -A .",
         "universal": "napi universal",
         "version": "napi version"
     }

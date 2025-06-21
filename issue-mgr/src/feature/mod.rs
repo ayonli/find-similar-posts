@@ -182,36 +182,36 @@ impl Task for AsyncFindSimilarRecords {
 }
 
 fn find_similar_records_in_parallel(
-    features: &IssueFeatures,
+    source: &IssueFeatures,
     candidates: &HashMap<String, IssueFeatures>,
     top_n: u32,
 ) -> Result<Vec<SimilarIssueFeaturesRecord>> {
-    let weights = get_feature_weights(features)?;
+    let weights = get_feature_weights(source)?;
     let mut matches: Vec<SimilarIssueFeaturesRecord> = candidates
         .par_iter()
-        .filter_map(|(issue_id, _features)| {
+        .filter_map(|(issue_id, features)| {
             let operation_score = {
-                if features.operation.is_some() && _features.operation.is_some() {
-                    let operand1 = features.operation.as_ref().unwrap();
-                    let operand2 = _features.operation.as_ref().unwrap();
+                if source.operation.is_some() && features.operation.is_some() {
+                    let operand1 = source.operation.as_ref().unwrap();
+                    let operand2 = features.operation.as_ref().unwrap();
                     normalized_similarity(operand1.chars(), operand2.chars()) * weights.operation
                 } else {
                     0.0
                 }
             };
             let phenomenon_score = {
-                if features.phenomenon.is_some() && _features.phenomenon.is_some() {
-                    let operand1 = features.phenomenon.as_ref().unwrap();
-                    let operand2 = _features.phenomenon.as_ref().unwrap();
+                if source.phenomenon.is_some() && features.phenomenon.is_some() {
+                    let operand1 = source.phenomenon.as_ref().unwrap();
+                    let operand2 = features.phenomenon.as_ref().unwrap();
                     normalized_similarity(operand1.chars(), operand2.chars()) * weights.phenomenon
                 } else {
                     0.0
                 }
             };
             let expected_behavior_score = {
-                if features.expected_behavior.is_some() && _features.expected_behavior.is_some() {
-                    let operand1 = features.expected_behavior.as_ref().unwrap();
-                    let operand2 = _features.expected_behavior.as_ref().unwrap();
+                if source.expected_behavior.is_some() && features.expected_behavior.is_some() {
+                    let operand1 = source.expected_behavior.as_ref().unwrap();
+                    let operand2 = features.expected_behavior.as_ref().unwrap();
                     normalized_similarity(operand1.chars(), operand2.chars())
                         * weights.expected_behavior
                 } else {
@@ -219,9 +219,9 @@ fn find_similar_records_in_parallel(
                 }
             };
             let actual_behavior_score = {
-                if features.actual_behavior.is_some() && _features.actual_behavior.is_some() {
-                    let operand1 = features.actual_behavior.as_ref().unwrap();
-                    let operand2 = _features.actual_behavior.as_ref().unwrap();
+                if source.actual_behavior.is_some() && features.actual_behavior.is_some() {
+                    let operand1 = source.actual_behavior.as_ref().unwrap();
+                    let operand2 = features.actual_behavior.as_ref().unwrap();
                     normalized_similarity(operand1.chars(), operand2.chars())
                         * weights.actual_behavior
                 } else {
@@ -409,6 +409,7 @@ mod tests {
 
         assert_eq!(matches.len(), 1);
         assert_eq!(matches[0].issue_id, "1");
+        assert_eq!(matches[0].features, record1.features);
         assert!(matches[0].score > 0.8);
     }
 }

@@ -107,5 +107,6 @@ Deno.test("IssueFeatureStore#findSimilarRecords", async () => {
 
     deepStrictEqual(similarRecords.length, 1)
     deepStrictEqual(similarRecords[0].issueId, "1")
+    deepStrictEqual(similarRecords[0].features, record1.features)
     ok(similarRecords[0].score > 0.8)
 })
