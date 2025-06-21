@@ -106,3 +106,93 @@ Deno.test("IssueFeatureStore#findSimilarRecords", async () => {
     deepStrictEqual(similarRecords[0].features, record1.features)
     ok(similarRecords[0].score > 0.8)
 })
+
+Deno.test("IssueFeatureStore.loadFromDb_mysql", async () => {
+    const store = await IssueFeatureStore.fromDb({
+        url: Deno.env.get("MYSQL_URL") ?? "",
+        table: "issue_features",
+    })
+
+    deepStrictEqual(
+        store.getRecord("1"),
+        {
+            issueId: "1",
+            features: {
+                operation: "Turn on the switch",
+                expectedBehavior: "The device is turned on",
+                actualBehavior: "The device is not turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(
+        store.getRecord("2"),
+        {
+            issueId: "2",
+            features: {
+                operation: "Turn off the switch",
+                phenomenon: "The device remains turned on instead if being turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(store.getRecord("3"), null)
+})
+
+Deno.test("IssueFeatureStore.loadFromDb_postgres", async () => {
+    const store = await IssueFeatureStore.fromDb({
+        url: Deno.env.get("PG_URL") ?? "",
+        table: "issue_features",
+    })
+
+    deepStrictEqual(
+        store.getRecord("1"),
+        {
+            issueId: "1",
+            features: {
+                operation: "Turn on the switch",
+                expectedBehavior: "The device is turned on",
+                actualBehavior: "The device is not turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(
+        store.getRecord("2"),
+        {
+            issueId: "2",
+            features: {
+                operation: "Turn off the switch",
+                phenomenon: "The device remains turned on instead if being turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(store.getRecord("3"), null)
+})
+
+Deno.test("IssueFeatureStore.loadFromDb_sqlite", async () => {
+    const store = await IssueFeatureStore.fromDb({
+        url: "sqlite:./assets/issue_mgr.db",
+        table: "issue_features",
+    })
+
+    deepStrictEqual(
+        store.getRecord("1"),
+        {
+            issueId: "1",
+            features: {
+                operation: "Turn on the switch",
+                expectedBehavior: "The device is turned on",
+                actualBehavior: "The device is not turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(
+        store.getRecord("2"),
+        {
+            issueId: "2",
+            features: {
+                operation: "Turn off the switch",
+                phenomenon: "The device remains turned on instead if being turned on",
+            },
+        } satisfies IssueFeaturesRecord,
+    )
+    deepStrictEqual(store.getRecord("3"), null)
+})

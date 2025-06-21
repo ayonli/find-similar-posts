@@ -1,16 +1,24 @@
 import { abortWith } from "@ayonli/jsext/async"
 // @deno-types="./index.d.ts"
 import {
+    type DbOptions,
     type IssueFeatures,
     type IssueFeaturesRecord,
     IssueFeatureStore as IssueFeatureStoreNative,
     type SimilarIssueFeaturesRecord,
 } from "./index.js"
 
-export type { IssueFeatures, IssueFeaturesRecord, SimilarIssueFeaturesRecord }
+export type { DbOptions, IssueFeatures, IssueFeaturesRecord, SimilarIssueFeaturesRecord }
 
 export class IssueFeatureStore {
     #impl: IssueFeatureStoreNative
+
+    static async fromDb(options: DbOptions): Promise<IssueFeatureStore> {
+        const impl = await IssueFeatureStoreNative.fromDb(options)
+        const ins = new this()
+        ins.#impl = impl
+        return ins
+    }
 
     constructor(records?: IssueFeaturesRecord[] | null | undefined) {
         this.#impl = new IssueFeatureStoreNative(records)

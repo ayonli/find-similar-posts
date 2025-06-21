@@ -1,0 +1,46 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "select * from issue_features where issue_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "issue_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "operation",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "phenomenon",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "expected_behavior",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "actual_behavior",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "8c733867674732887bba8b5606781fd2a2c5fe58392718f64a02d8459a78e367"
+}

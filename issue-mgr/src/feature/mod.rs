@@ -12,6 +12,7 @@ use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::feature::util::get_feature_weights;
 
+mod ext;
 mod util;
 
 #[napi(object)]
