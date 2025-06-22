@@ -15,13 +15,17 @@
         "semiColons": false,
         "exclude": [
             "**/*/index.js",
-            "**/*/index.d.ts"
+            "**/*/index.d.ts",
+            "**/npm/*",
+            "**/.sqlx/*"
         ]
     },
     "lint": {
         "exclude": [
-            "index.js",
-            "index.d.ts"
+            "**/*/index.js",
+            "**/*/index.d.ts",
+            "**/npm/*",
+            "**/.sqlx/*"
         ]
     }
 }

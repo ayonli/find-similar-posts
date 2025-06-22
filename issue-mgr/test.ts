@@ -199,7 +199,7 @@ Deno.test("IssueFeatureStore.fromDB_sqlite", async () => {
 })
 
 Deno.test("IssueFeatureStore.fromCSV", async () => {
-    const store = await IssueFeatureStore.fromCSV("./assets/issue_features.csv")
+    const store = await IssueFeatureStore.loadCSV("./assets/issue_features.csv")
 
     deepStrictEqual(
         store.getRecord("1"),
@@ -230,11 +230,11 @@ Deno.test(
     func(async (defer) => {
         const input = "./assets/issue_features.csv"
         const output = "./assets/issue_features_copy.csv"
-        const store1 = await IssueFeatureStore.fromCSV(input)
-        await store1.toCSV(output)
+        const store1 = await IssueFeatureStore.loadCSV(input)
+        await store1.dumpCSV(output)
         defer(() => Deno.remove(output))
 
-        const store2 = await IssueFeatureStore.fromCSV(output)
+        const store2 = await IssueFeatureStore.loadCSV(output)
         deepStrictEqual(store2.getRecord("1"), store1.getRecord("1"))
         deepStrictEqual(store2.getRecord("2"), store1.getRecord("2"))
         deepStrictEqual(store2.getRecord("3"), null)

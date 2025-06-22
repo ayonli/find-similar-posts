@@ -20,15 +20,15 @@ export class IssueFeatureStore {
         return ins
     }
 
-    static async fromCSV(path: string): Promise<IssueFeatureStore> {
-        const impl = await IssueFeatureStoreNative.fromCsv(path)
+    static async loadCSV(path: string): Promise<IssueFeatureStore> {
+        const impl = await IssueFeatureStoreNative.loadCsv(path)
         const ins = new this()
         ins.#impl = impl
         return ins
     }
 
-    async toCSV(path: string): Promise<void> {
-        return await this.#impl.toCsv(path)
+    async dumpCSV(path: string): Promise<void> {
+        return await this.#impl.dumpCsv(path)
     }
 
     constructor(records?: IssueFeaturesRecord[] | null | undefined) {

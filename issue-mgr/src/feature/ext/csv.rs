@@ -14,12 +14,12 @@ use crate::feature::{
 #[napi]
 impl IssueFeatureStore {
     #[napi(ts_return_type = "Promise<IssueFeatureStore>")]
-    pub fn from_csv(path: String) -> AsyncTask<AsyncLoader> {
+    pub fn load_csv(path: String) -> AsyncTask<AsyncLoader> {
         AsyncTask::new(AsyncLoader { path })
     }
 
     #[napi(ts_return_type = "Promise<void>")]
-    pub fn to_csv(&self, path: String) -> AsyncTask<AsyncDumper> {
+    pub fn dump_csv(&self, path: String) -> AsyncTask<AsyncDumper> {
         AsyncTask::new(AsyncDumper {
             path,
             issue_features_map: self.issue_features_map.clone(),
